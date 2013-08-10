@@ -5,6 +5,9 @@ import getpass
 import yaml
 import sys
 
+ROOT =  os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+MODELS =  yaml.load(open(os.path.join(ROOT, 'conf', 'models.yml')))
+
 
 class Logger(object):
     def __init__(self, name, loglevel, logfile):

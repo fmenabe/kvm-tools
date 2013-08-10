@@ -1,0 +1,34 @@
+redhat5.8:
+    os: linux
+    type: redhat
+    file: modele-redhat5.8-64.qcow2
+redhat6.3:
+    os: linux
+    type: redhat
+    file: modele-redhat6.3-64.qcow2
+centos5:
+    os: linux
+    type: redhat
+    file: modele-centos5-64.qcow2
+ubuntu-lucid:
+    os: linux
+    type: debian
+    file: modele-ubuntu-lucid-64.qcow2
+ubuntu-natty:
+    os: linux
+    type: debian
+    file: modele-ubuntu-natty-64.qcow2
+ubuntu-oneiric:
+    os: linux
+    type: debian
+    file: modele-ubuntu-oneiric-64.qcow2
+ubuntu-precise:
+    os: linux
+    type: debian
+    file: modele-ubuntu-precise-64.qcow2
+w2003:
+    os: windows
+    file: modele-w2003-32.qcow2
+w2008-r2:
+    os: windows
+    file: modele-w2008R2-64.qcow2
