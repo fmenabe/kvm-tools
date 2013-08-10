@@ -39,25 +39,25 @@ class Logger(object):
         self.logger.addHandler(cli_handler)
 
 
-    def debug(self, msg, quit=False):
-        self.logger.debug(msg)
+    def debug(self, msg, prompt='', quit=False):
+        self.logger.debug('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
             sys.exit(0)
 
 
-    def info(self, msg, quit=False):
-        self.logger.info(msg)
+    def info(self, msg, prompt='', quit=False):
+        self.logger.info('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
             sys.exit(0)
 
 
-    def warn(self, msg, quit=False):
-        self.logger.warn(msg)
+    def warn(self, msg, prompt='', quit=False):
+        self.logger.warn('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
             sys.exit(1)
 
 
-    def error(self, msg, quit=False):
-        self.logger.error(msg)
+    def error(self, msg, prompt='', quit=False):
+        self.logger.error('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
             sys.exit(1)
