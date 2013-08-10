@@ -1,5 +1,4 @@
-This is a program for managing KVM hosts.
+kvm-tools
+=========
 
-Features:
-    * deploying guests
-    * migrating guests from one hypervisor to another.
+Command-line tool for managing KVM guests.
