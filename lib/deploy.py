@@ -140,9 +140,10 @@ def main(args):
 
     # Per guest deployment.
     if args.name is not None:
-        for (option, option_params) in args:
-            pass
-        deploy()
+        try:
+            deploy()
+        except utils.QuitOnError:
+            sys.exit(1)
     # Multi guests deployment.
     # TODO: use multiprocessing for parallelizing deployment.
     else:
@@ -155,4 +156,7 @@ def main(args):
                     for arg, value in args.iteritems())
             )
             guest_params['name'] = guest
-            deploy(guest_params)
+            try:
+                deploy(guest_params)
+            except utils.QuitOnError:
+                pass

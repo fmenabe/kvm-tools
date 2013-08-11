@@ -9,6 +9,10 @@ ROOT =  os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MODELS =  yaml.load(open(os.path.join(ROOT, 'conf', 'models.yml')))
 
 
+class QuitOnError(Exception):
+    pass
+
+
 class Logger(object):
     def __init__(self, name, loglevel, logfile):
         # Create log directory if not exists.
@@ -45,22 +49,22 @@ class Logger(object):
     def debug(self, msg, prompt='', quit=False):
         self.logger.debug('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
-            sys.exit(0)
+            raise QuitOnError(msg)
 
 
     def info(self, msg, prompt='', quit=False):
         self.logger.info('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
-            sys.exit(0)
+            raise QuitOnError(msg)
 
 
     def warn(self, msg, prompt='', quit=False):
         self.logger.warn('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
-            sys.exit(1)
+            raise QuitOnError(msg)
 
 
     def error(self, msg, prompt='', quit=False):
         self.logger.error('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
-            sys.exit(1)
+            raise QuitOnError(msg)
