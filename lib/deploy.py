@@ -130,6 +130,20 @@ def deploy():
     # Connect to source and destination hosts.
     src_host, dst_host = connect()
 
+    # Add model disk size to disks.
+    disks[0]['size'] = unix.utils.kb2gb(src_host.img_size(
+        os.path.join(args.src_disks, utils.MODELS[args.model]['file'])))
+
+    # Check resources on the destination host.
+    if not args.no_check:
+        try:
+            logger.info('Checking memory available on destination', args.name)
+            utils.check_memory(dst_host, args.memory)
+            logger.info('Checking storage available on destination', args.name)
+            utils.check_storage(dst_host, disks)
+        except utils.ResourceError as err:
+            logger.error(err, args.name)
+
 
 def main(args):
     # 'main' function is only the entry point of the command. Make 'args'

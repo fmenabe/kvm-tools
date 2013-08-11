@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
 import getpass
 import yaml
-import sys
+import kvm
+from unix.utils import kb2gb, gb2kb
 
 ROOT =  os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 MODELS =  yaml.load(open(os.path.join(ROOT, 'conf', 'models.yml')))
+
+
+class ResourceError(Exception):
+    pass
 
 
 class QuitOnError(Exception):
@@ -68,3 +74,30 @@ class Logger(object):
         self.logger.error('(%s) %s' % (prompt, msg) if prompt else msg)
         if quit:
             raise QuitOnError(msg)
+
+
+def check_memory(host, memory):
+    vms_memory = sum([host.conf(guest)['memory']
+        for guest in host.vms if host.state(guest) == kvm.RUNNING])
+
+    mem_diff = host.memory - vms_memory - gb2kb(memory)
+    if mem_diff < 0:
+        raise ResourceError('missing %.3f Gb' % kb2gb(float(-mem_diff), False))
+
+
+def check_storage(host, disks):
+    # Get needed size for each partition.
+    partitions = {}
+    for disk in disks:
+        partition = host.execute(
+            'df -k %s' % os.path.dirname(disk['path'])
+        )[1].split('\n')[1].strip().split()[5]
+        partitions.setdefault(partition, 0)
+        partitions[partition] += disk['size']
+
+    for partition, needed_size in partitions.iteritems():
+        available_size = kb2gb(host.execute('df -k %s' % partition)[1]
+            .split('\n')[1].strip().split()[3])
+        if needed_size >= available_size:
+            raise ResourceError(
+                "missing %dG on '%s'" % (needed_size - available_size, partition))
